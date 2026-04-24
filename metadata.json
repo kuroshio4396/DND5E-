@@ -1,0 +1,6 @@
+{
+  "name": "D&D 环境交互生成器",
+  "description": "基于DND 5E和《博德之门3》风格的跑团环境交互选项生成器，帮助DM快速构建场景互动。",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
