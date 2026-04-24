@@ -3,9 +3,6 @@ import { GoogleGenAI, Type } from '@google/genai';
 import { Dices, Copy, CheckCheck, Sparkles, ScrollText, AlertCircle, Loader2, Shield, Settings, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-// Initialize Gemini API
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 interface Interaction {
   skill: string;
   dc: number;
@@ -114,7 +111,13 @@ ${scene}`;
         const parsed = JSON.parse(rawText);
         setInteractions(parsed.interactions || parsed);
       } else {
-        const runtimeAi = (customApiKey && customProvider === 'gemini') ? new GoogleGenAI({ apiKey: customApiKey }) : ai;
+        const activeKey = (customProvider === 'gemini' && customApiKey) ? customApiKey : process.env.GEMINI_API_KEY;
+        
+        if (!activeKey) {
+          throw new Error('运行环境未检测到默认 API 秘钥。请点击右上角“设定”手动配置您的专属 API 秘钥。');
+        }
+
+        const runtimeAi = new GoogleGenAI({ apiKey: activeKey });
         const response = await runtimeAi.models.generateContent({
           model: 'gemini-2.5-flash',
           contents: promptContent,
